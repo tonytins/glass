@@ -1,8 +1,8 @@
 #![allow(dead_code)]
-use volatile::Volatile;
+use core::fmt;
 use lazy_static::lazy_static;
 use spin::Mutex;
-use core::fmt;
+use volatile::Volatile;
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
@@ -73,7 +73,7 @@ struct ScreenChar {
 }
 
 #[repr(transparent)]
-struct  Buffer {
+struct Buffer {
     chars: [[Volatile<ScreenChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
 
@@ -117,15 +117,19 @@ impl Writer {
     fn new_line(&mut self) {}
 }
 
-pub fn print_hello() {
-    use core::fmt::Write;
-    let mut writer = Writer {
-        column_position: 0,
-        color_code: ColorCode::new(Color::Yellow, Color::Black),
-        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-    };
+#[macro_export]
+macro_rules! print {
+    ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
+}
 
-    writer.write_byte(b'H');
-    writer.write_string("ello ");
-    write!(writer, "the numbers are {} and {}", 42, 1.0/3.0).unwrap();
+#[macro_export]
+macro_rules! println {
+    () => ($crate::print!("\n"));
+    ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
+}
+
+#[doc(hidden)]
+pub fn _print(args: fmt::Arguments) {
+    use core::fmt::Write;
+    WRITER.lock().write_fmt(args).unwrap();
 }
