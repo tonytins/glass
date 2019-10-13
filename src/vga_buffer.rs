@@ -1,3 +1,5 @@
+// Anthony Wilcox licenses this file to you under the BSD 3-clause license.
+// See the LICENSE file in the project root for more information.
 #![allow(dead_code)]
 use core::fmt;
 use lazy_static::lazy_static;
