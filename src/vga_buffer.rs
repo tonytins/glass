@@ -1,7 +1,38 @@
 #![allow(dead_code)]
+use volatile::Volatile;
+use lazy_static::lazy_static;
+use spin::Mutex;
+use core::fmt;
 
 const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
+
+impl Writer {
+    fn clear_row(&mut self, row: usize) {
+        let blank = ScreenChar {
+            ascii_char: b' ',
+            color_code: self.color_code,
+        };
+        for col in 0..BUFFER_WIDTH {
+            self.buffer.chars[row][col].write(blank);
+        }
+    }
+}
+
+impl fmt::Write for Writer {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        self.write_string(s);
+        Ok(())
+    }
+}
+
+lazy_static! {
+    pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer {
+        column_position: 0,
+        color_code: ColorCode::new(Color::Yellow, Color::Black),
+        buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
+    });
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
@@ -43,7 +74,7 @@ struct ScreenChar {
 
 #[repr(transparent)]
 struct  Buffer {
-    chars: [[ScreenChar; BUFFER_WIDTH]; BUFFER_HEIGHT],
+    chars: [[Volatile<ScreenChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
 
 pub struct Writer {
@@ -65,10 +96,10 @@ impl Writer {
                 }
 
                 let color_code = self.color_code;
-                self.buffer.chars[row][col] = ScreenChar {
+                self.buffer.chars[row][col].write(ScreenChar {
                     ascii_char: byte,
                     color_code,
-                };
+                });
                 self.column_position += 1;
             }
         }
@@ -87,6 +118,7 @@ impl Writer {
 }
 
 pub fn print_hello() {
+    use core::fmt::Write;
     let mut writer = Writer {
         column_position: 0,
         color_code: ColorCode::new(Color::Yellow, Color::Black),
@@ -95,5 +127,5 @@ pub fn print_hello() {
 
     writer.write_byte(b'H');
     writer.write_string("ello ");
-    writer.write_string("world!");
+    write!(writer, "the numbers are {} and {}", 42, 1.0/3.0).unwrap();
 }
