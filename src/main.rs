@@ -2,16 +2,15 @@
 // See the LICENSE file in the project root for more information.
 #![no_std]
 #![no_main]
-#![feature(custom_test_frameworks)]
-#![test_runner(crate::test_runner)]
-#![reexport_test_harness_main = "test_main"]
 #![allow(dead_code)]
 
-mod vga_buffer;
 mod emulator;
+mod serial;
+mod vga_buffer;
 
 use core::panic::PanicInfo;
 use emulator::*;
+use test::test_main;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -22,5 +21,8 @@ fn panic(info: &PanicInfo) -> ! {
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
     println!("Welcome to Glass.");
+
+    #[cfg(test)]
+    test_main();
     loop {}
 }
