@@ -5,7 +5,10 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      matrix:
+        platform: [ubuntu-16.04, ubuntu-latest]
     steps:
     - uses: actions/checkout@v1
     - name: Install nightly toolchain
@@ -26,5 +29,5 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: glass-os
-        path: 'target/**/*.bin'
+        path: target/x86_64-glass/debug/bootimage-glass.bin
       
