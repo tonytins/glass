@@ -11,9 +11,12 @@ jobs:
         platform: [ubuntu-16.04, ubuntu-latest, windows-latest, macOS-latest]
     steps:
     - uses: actions/checkout@v1
-    - name: Switch toolchains
+    - name: Install nightly toolchain
+      run: rustup toolchain install nightly
+    - name: Install components
       run: | 
         rustup toolchain install nightly
+        rustup component add llvm-tools-preview
         rustup component add rust-src
     - name: Install build tools
       run: |
