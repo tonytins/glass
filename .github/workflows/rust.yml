@@ -8,14 +8,19 @@ jobs:
     runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
-        platform: [ubuntu-16.04, ubuntu-latest, windows-latest, macOS-latest]
+        platform: [ubuntu-16.04, ubuntu-latest, macOS-latest]
     steps:
     - uses: actions/checkout@v1
     - name: Switch toolchains
-      run: rustup toolchain install nightly && rustup default nightly
+      run: | 
+        rustup toolchain install nightly
+        rustup default nightly
     - name: Install bootimage
-      run: cargo install cargo-xbuild && cargo install bootimage --version "^0.7.7"
+      run: |
+        cargo install cargo-xbuild
+        cargo install bootimage --version "^0.7.7"
     - name: Build
       run: cargo bootimage --verbose
     - name: Run tests
       run: cargo test --verbose
+      
