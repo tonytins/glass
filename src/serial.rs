@@ -1,3 +1,5 @@
+// Anthony Foxclaw licenses this file to you under the MPL-2.0 license.
+// See the LICENSE file in the project root for more information.
 /* use lazy_static::lazy_static;
 use spin::Mutex;
 use uart_16550::SerialPort;

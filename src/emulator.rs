@@ -1,4 +1,4 @@
-// Anthony Wilcox licenses this file to you under the BSD 3-clause license.
+// Anthony Foxclaw licenses this file to you under the MPL-2.0 license.
 // See the LICENSE file in the project root for more information.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
