@@ -1,5 +1,7 @@
 # Glass
 
+![Rust](https://github.com/tonytins/glass/workflows/Rust/badge.svg)
+
 Glass is a hobby operating system written in Rust.
 
 ## Prerequisites
