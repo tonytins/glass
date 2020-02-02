@@ -1,4 +1,4 @@
-name: Rust
+name: Glass OS
 
 on: [push]
 
@@ -26,5 +26,5 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: glass-os
-        path: target/x86_64-glass/debug/bootimage-glass.bin
+        path: 'target/**/*.bin'
       
