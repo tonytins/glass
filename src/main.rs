@@ -4,13 +4,10 @@
 #![no_main]
 #![allow(dead_code)]
 
-mod emulator;
 mod serial;
 mod vga_buffer;
 
 use core::panic::PanicInfo;
-use emulator::*;
-use test::test_main;
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
