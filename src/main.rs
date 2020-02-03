@@ -19,7 +19,5 @@ fn panic(info: &PanicInfo) -> ! {
 pub extern "C" fn _start() -> ! {
     println!("Welcome to Glass.");
 
-    #[cfg(test)]
-    test_main();
     loop {}
 }

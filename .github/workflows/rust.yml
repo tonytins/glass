@@ -14,14 +14,13 @@ jobs:
     - name: Install nightly toolchain
       run: rustup toolchain install nightly
     - name: Install components
-      run: |
-        rustup component add llvm-tools-preview
-        rustup component add rust-src
+      run: rustup component add rust-src
     - name: Install build tools
       run: |
-        cargo install cargo-binutils
         cargo install cargo-xbuild
         cargo install bootimage --version "^0.7.7"
+    - name: Test
+      run: cargo xtest --verbose
     - name: Build
       run: cargo bootimage --verbose
     - name: Upload artifact
