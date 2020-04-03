@@ -7,7 +7,8 @@ Glass is a hobby operating system written in Rust, based on Philipp Oppermann's 
 ## Prerequisites
 
 - Bootimage: ``cargo install bootimage --version "^0.7.7"``
-- QEMU
+- xBuild: ``cargo install cargo-xbuild``
+- QEMU (Optional)
 
 ## Compiling & Running
 
